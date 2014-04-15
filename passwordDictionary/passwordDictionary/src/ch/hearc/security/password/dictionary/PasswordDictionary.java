@@ -23,15 +23,22 @@ public class PasswordDictionary {
         ArrayList<Character> dataSet = new ArrayList<>();
         dataSet.add('A');
         dataSet.add('B');
-        int passwordLenght = 4;
-        GeneratorController generatorController = new GeneratorController(dataSet, passwordLenght);
+        dataSet.add('C');
+        dataSet.add('D');
+        dataSet.add('E');
+        int pwdLenMin = 2;
+        int pwdLenMax = 4;
+        GeneratorController generatorController = new GeneratorController(dataSet, pwdLenMin, pwdLenMax);
         LinkedHashSet<StringBuilder> passwords = generatorController.generate();
         
         System.out.println("Password has been generated :");
+        
+        
+        for(StringBuilder pwd : passwords)
+            System.out.println(pwd.toString());
+        
         System.out.println("Number of password : " + passwords.size());
-        Iterator it = passwords.iterator();
-        while(it.hasNext()) {
-            System.out.println(it.next());
-        }
+        
+        
     }
 }

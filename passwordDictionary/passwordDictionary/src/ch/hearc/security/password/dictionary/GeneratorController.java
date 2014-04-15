@@ -23,36 +23,52 @@ public class GeneratorController {
     
     private int nbCores;
     private LinkedHashSet<StringBuilder> dataOld;
-    private LinkedHashSet<StringBuilder> dataNew;
-    private ArrayList<Character> dataSet;
-    private int passwordLenght;
+    private LinkedHashSet<StringBuilder> passwords;
+    private ArrayList<Character> alphabet;
+    private int pwdLenMin;
+    private int pwdLenMax;
+    private int nbDataPerThread;
     
-    public GeneratorController(ArrayList<Character> dataSet, int passwordLenght) {
+    public GeneratorController(ArrayList<Character> dataSet,int pwdLenMin, int pwdLenMax) {
         if (dataSet.size() >= Runtime.getRuntime().availableProcessors()) {
             this.nbCores = Runtime.getRuntime().availableProcessors();
         } else {
             this.nbCores = 1;
         }
-        this.passwordLenght = passwordLenght;
-        this.dataNew = new LinkedHashSet<>();
+        this.pwdLenMin = pwdLenMin;
+        this.pwdLenMax = pwdLenMax;
+        this.passwords = new LinkedHashSet<>();
         this.dataOld = new LinkedHashSet<>();
-        this.dataSet = dataSet;
+        this.alphabet = dataSet;
         initDataOld();
         System.out.println("Nb cores : " + nbCores);
+        System.out.println("Nb treads : " + nbCores);
+        System.out.println("Nb alphabel : " + alphabet.size());
+        System.out.println("Pwd len min : " + pwdLenMin);
+        System.out.println("Pwd len max : " + pwdLenMax);
     }
     
     public LinkedHashSet<StringBuilder> generate() {
         ExecutorService executorService = Executors.newFixedThreadPool(nbCores);
         CyclicBarrier barrier = new CyclicBarrier(nbCores+1);
-        int nbDataPerThread = dataSet.size() / nbCores;
+        nbDataPerThread = (int) Math.floor( ((double)alphabet.size())/((double)nbCores) );
+        System.out.println("Data per thread : " + nbDataPerThread);
         
+        int[] sliceIndex = null;
         
-        for (int n = 1; n < passwordLenght; ++n) {
+        if(pwdLenMin == 0)
+            passwords.add(new StringBuilder(""));
+        if(pwdLenMin <= 1)
+            passwords.addAll(dataOld);
+        
+        for (int n = 1; n < pwdLenMax; ++n) {
             LinkedHashSet<StringBuilder>[] solTab = new LinkedHashSet[nbCores];
             
             for (int i = 0; i < nbCores; ++i){
                 solTab[i] = new LinkedHashSet<>();
-                Runnable generator = new Generator(dataOld, solTab[i], dataSet.subList(i * nbDataPerThread, ((i + 1) * nbDataPerThread)), barrier);
+                sliceIndex = getSliceIndex(i);
+                //System.out.println("["+sliceIndex[0]+","+sliceIndex[1]+"]");
+                Runnable generator = new Generator(dataOld, solTab[i], alphabet.subList(sliceIndex[0],sliceIndex[1]), barrier);
                 executorService.execute(generator);
             }
             try {
@@ -61,19 +77,29 @@ public class GeneratorController {
                 Logger.getLogger(GeneratorController.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
             dataOld.clear();
             for (LinkedHashSet<StringBuilder> elem : solTab) {
                 dataOld.addAll(elem);
             }
+            if(n+1 >= pwdLenMin)
+                passwords.addAll(dataOld);
             
         }
         executorService.shutdown();
-        return dataOld;
+        return passwords;
     }
     
     private void initDataOld() {
-        for (Character c : dataSet) {
+        for (Character c : alphabet) {
             dataOld.add(new StringBuilder(c.toString()));
         }
+    }
+
+    private int[] getSliceIndex(int i) {
+        int ends = (i+1)*nbDataPerThread;
+        if( i == nbCores-1)
+            ends = (alphabet.size());
+        return new int[] {i*nbDataPerThread, ends};
     }
 }

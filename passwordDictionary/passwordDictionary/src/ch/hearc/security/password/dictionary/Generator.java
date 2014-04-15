@@ -38,13 +38,12 @@ public class Generator implements Runnable{
     
     @Override
     public void run() {
-        Iterator itSource = dataSource.iterator();
-        Iterator itData = dataSet.iterator();
         StringBuilder value;
-        while(itSource.hasNext()) {
-            StringBuilder begin = (StringBuilder)itSource.next();
-            while(itData.hasNext()) {
-                value = (begin.append(itData.next()));
+        
+        for( StringBuilder sbSource : dataSource) {
+            for(Character cData : dataSet) {
+                value = new StringBuilder(sbSource);
+                value.append(cData.toString());
                 dataResult.add(value);
             }
         }

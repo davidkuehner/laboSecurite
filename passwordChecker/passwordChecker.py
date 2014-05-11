@@ -4,15 +4,12 @@ import getpass
 import os
 import subprocess
 
-
-def unix_load_modules():
-    """
-    Loads the modules which are only available on unix python environments.
-    """
-    __import__('pwd')
-    __import__('spwd')
-    __import__('crypt')
-
+try:
+    import pwd
+    import spwd
+    import crypt
+except ImportError:
+    pass
 
 def unix_has_current_user_root_privileges():
     """
@@ -117,8 +114,6 @@ if __name__ == "__main__":
 
     # Check current OS and select the appropriate method
     if os.name == 'posix':
-        # Load the modules which can only be loaded in linux systems
-        unix_load_modules()
 
         # The process has to be executed as root, if not no access to the password database can be done.
         if not unix_has_current_user_root_privileges():

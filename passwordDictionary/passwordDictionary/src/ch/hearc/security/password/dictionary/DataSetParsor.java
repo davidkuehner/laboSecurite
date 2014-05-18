@@ -4,7 +4,8 @@
  */
 package ch.hearc.security.password.dictionary;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -15,7 +16,8 @@ public class DataSetParsor {
     private Range uppercaseRange;
     private Range lowercaseRange;
     private Range numberRange;
-    private ArrayList<Character> dataSet;
+    private String specialCharacters;
+    private Set<Character> dataSet;
     private static final Character RANGE_OPPENER = '[';
     private static final Character RANGE_CLOSER = ']';
     private static final Character RANGE_SEPARATOR = '-';
@@ -29,7 +31,7 @@ public class DataSetParsor {
     private static final int RANGE_NUMERICAL_SIZE = 10;
     private static final int ALPHABET_A_SHIFT = 10;
 
-    public DataSetParsor(String uppercaseRange, String lowercaseRange, String numberRange) throws Exception {
+    public DataSetParsor(String uppercaseRange, String lowercaseRange, String numberRange, String specialCharacters) throws Exception {
 
         checkRanges(uppercaseRange, lowercaseRange, numberRange);
 
@@ -48,12 +50,17 @@ public class DataSetParsor {
         } else {
             this.numberRange = null;
         }
+        if ( specialCharacters != null) {
+            this.specialCharacters = specialCharacters;
+        } else {
+            this.specialCharacters = null;
+        }
 
-        this.dataSet = new ArrayList<>();
+        this.dataSet = new HashSet<>();
         constructDataSet();
     }
 
-    public ArrayList<Character> getDataSet() {
+    public Set<Character> getDataSet() {
         return dataSet;
     }
 
@@ -71,6 +78,12 @@ public class DataSetParsor {
         if (numberRange != null) {
             while (numberRange.hasNext()) {
                 dataSet.add(Character.toChars(numberRange.next())[0]);
+            }
+        }
+        if (specialCharacters != null) {
+            for ( char c : specialCharacters.toCharArray())
+            {
+                dataSet.add(c);
             }
         }
     }

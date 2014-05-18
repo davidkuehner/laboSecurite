@@ -33,7 +33,7 @@ public class DataSetParsor {
 
     public DataSetParsor(String uppercaseRange, String lowercaseRange, String numberRange, String specialCharacters) throws Exception {
 
-        checkRanges(uppercaseRange, lowercaseRange, numberRange);
+        checkRanges(uppercaseRange, lowercaseRange, numberRange, specialCharacters);
 
         if (uppercaseRange != null) {
             this.uppercaseRange = new Range(Character.getNumericValue(uppercaseRange.charAt(RANGE_START_POS)) + UPPERCASE_OFFSET, Character.getNumericValue(uppercaseRange.charAt(RANGE_STOP_POS)) + UPPERCASE_OFFSET, RANGE_STEP);
@@ -124,9 +124,9 @@ public class DataSetParsor {
         return range.length() == 5;
     }
 
-    private void checkRanges(String uppercaseRange, String lowercaseRange, String numberRange) throws Exception {
+    private void checkRanges(String uppercaseRange, String lowercaseRange, String numberRange, String specialCharacters) throws Exception {
         
-        if (uppercaseRange == null && lowercaseRange == null && numberRange == null)
+        if (uppercaseRange == null && lowercaseRange == null && numberRange == null && specialCharacters == null)
             throw new Exception("[DataSetParsor] : At minimum one range must be defined");
 
         if (uppercaseRange != null) {

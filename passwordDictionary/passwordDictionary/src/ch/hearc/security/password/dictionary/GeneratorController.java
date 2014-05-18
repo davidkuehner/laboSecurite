@@ -41,11 +41,6 @@ public class GeneratorController {
             this.dataOld = new LinkedHashSet<>();
             this.alphabet = new ArrayList<>(dataSet);
             initDataOld();
-            System.out.println("Nb cores : " + nbCores);
-            System.out.println("Nb treads : " + nbCores);
-            System.out.println("Nb alphabel : " + alphabet.size());
-            System.out.println("Pwd len min : " + pwdLenMin);
-            System.out.println("Pwd len max : " + pwdLenMax);
         } else {
             throw new Exception("[GeneratorController] : DataSet cannot be null"); 
         }
@@ -55,7 +50,7 @@ public class GeneratorController {
         ExecutorService executorService = Executors.newFixedThreadPool(nbCores);
         CyclicBarrier barrier = new CyclicBarrier(nbCores + 1);
         nbDataPerThread = (int) Math.floor(((double) alphabet.size()) / ((double) nbCores));
-        System.out.println("Data per thread : " + nbDataPerThread);
+        // System.out.println("Data per thread : " + nbDataPerThread);
 
         int[] sliceIndex = null;
 

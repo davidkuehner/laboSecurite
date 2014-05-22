@@ -1,18 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.security.password.dictionary;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 /**
- *
  * @author david.kuhner
  */
 public class PasswordDictionary {
 
+    /*------------------------------------------------------------------*\
+    |*                          Attributes                              *|
+    \*------------------------------------------------------------------*/
+    
     private static int pwdLenMin;
     private static int pwdLenMax;
     private static String uppercase;
@@ -22,12 +21,27 @@ public class PasswordDictionary {
     private static boolean verboseMode;
     private static boolean passwordPrint;
 
+    /*------------------------------------------------------------------*\
+    |*                              Main                                *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * The program's main
+     * @param args 
+     */
     public static void main(String[] args) {
-        getProperty();
+        getProperties();
         generatePasswords();
     }
 
-    private static void getProperty() {
+    /*------------------------------------------------------------------*\
+    |*                          Private Methods                         *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Gets back the properties passed by argument line
+     */
+    private static void getProperties() {
         try {
             Integer pwdLen = Integer.parseInt(System.getProperty("lenght", "1"));
             pwdLenMin = Integer.parseInt(System.getProperty("lenghtMin", pwdLen.toString()));
@@ -43,6 +57,9 @@ public class PasswordDictionary {
         }
     }
 
+    /**
+     * Calls the GeneratorController with the given properties
+     */
     private static void generatePasswords() {
         try {
 
@@ -69,6 +86,9 @@ public class PasswordDictionary {
         }
     }
 
+    /**
+     * Print out information if verbose mode is activated
+     */
     private static void informations(HashSet<Character> dataSet, LinkedHashSet<StringBuilder> passwords, long duration) {
         int nbCores = Runtime.getRuntime().availableProcessors();
         int nbThreads = 0;

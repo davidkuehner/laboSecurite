@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.security.password.dictionary;
 
 import java.util.ArrayList;
@@ -15,11 +11,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author david.kuhner
+ * 
+ * Generator controller
  */
 public class GeneratorController {
 
+    /*------------------------------------------------------------------*\
+    |*                          Attributes                              *|
+    \*------------------------------------------------------------------*/
+    
     private int nbCores;
     private LinkedHashSet<StringBuilder> dataOld;
     private LinkedHashSet<StringBuilder> passwords;
@@ -28,6 +29,18 @@ public class GeneratorController {
     private int pwdLenMax;
     private int nbDataPerThread;
 
+    /*------------------------------------------------------------------*\
+    |*                          Constructor                             *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Construct a GeneratorController
+     * 
+     * @param dataSet the alphabet of the passwords
+     * @param pwdLenMin the lenght min of the passwords
+     * @param pwdLenMax the lenght max of the passwords
+     * @throws Exception 
+     */
     public GeneratorController(HashSet<Character> dataSet, int pwdLenMin, int pwdLenMax) throws Exception {
         if (dataSet != null) {
             if (dataSet.size() >= Runtime.getRuntime().availableProcessors()) {
@@ -46,6 +59,18 @@ public class GeneratorController {
         }
     }
 
+    /*------------------------------------------------------------------*\
+    |*                          Public Methods                          *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Generate the passwords
+     * 
+     * This algorithm uses the same number of threds as there is avialable
+     * core. The algorithme is based on character addition repartitions.
+     * 
+     * @return a linkedHashSet containing the passwords
+     */
     public LinkedHashSet<StringBuilder> generate() {
         ExecutorService executorService = Executors.newFixedThreadPool(nbCores);
         CyclicBarrier barrier = new CyclicBarrier(nbCores + 1);
@@ -91,6 +116,10 @@ public class GeneratorController {
         return passwords;
     }
 
+    /*------------------------------------------------------------------*\
+    |*                          Private Methods                         *|
+    \*------------------------------------------------------------------*/
+    
     private void initDataOld() {
         for (Character c : alphabet) {
             dataOld.add(new StringBuilder(c.toString()));

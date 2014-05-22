@@ -1,18 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.security.password.dictionary;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * @author david.kuhner
+ * 
+ * DataSetParsor converts input properties like [a-z] to a set of charaters
  */
 public class DataSetParsor {
 
+    /*------------------------------------------------------------------*\
+    |*                          Attributes                              *|
+    \*------------------------------------------------------------------*/
+    
     private Range uppercaseRange;
     private Range lowercaseRange;
     private Range numberRange;
@@ -31,6 +32,18 @@ public class DataSetParsor {
     private static final int RANGE_NUMERICAL_SIZE = 10;
     private static final int ALPHABET_A_SHIFT = 10;
 
+    /*------------------------------------------------------------------*\
+    |*                          Constructor                             *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Construc a DataSetParsor
+     * 
+     * @param uppercaseRange the uppercase range to convert to a set
+     * @param lowercaseRange the lowercase range to convert to a set
+     * @param numberRangethe the number range to convert to a set
+     * @param specialCharacters the special characters to add to a set
+     */
     public DataSetParsor(String uppercaseRange, String lowercaseRange, String numberRange, String specialCharacters) throws Exception {
 
         checkRanges(uppercaseRange, lowercaseRange, numberRange, specialCharacters);
@@ -60,10 +73,22 @@ public class DataSetParsor {
         constructDataSet();
     }
 
+    /*------------------------------------------------------------------*\
+    |*                          Public Methods                          *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Returns a dataSet containing the passwords alphabet
+     * @return 
+     */
     public Set<Character> getDataSet() {
         return dataSet;
     }
 
+    /*------------------------------------------------------------------*\
+    |*                          Private Methods                         *|
+    \*------------------------------------------------------------------*/
+    
     private void constructDataSet() {
         if (uppercaseRange != null) {
             while (uppercaseRange.hasNext()) {

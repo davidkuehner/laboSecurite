@@ -1,19 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.security.password.dictionary;
 
 /**
- *
  * @author david.kuhner
+ * 
+ * Range tool class
  */
 class Range {
+    
+    /*------------------------------------------------------------------*\
+    |*                          Attributes                              *|
+    \*------------------------------------------------------------------*/
     
     private Integer start;
     private int stop;
     private int current;
     private int step;
+    
+    /*------------------------------------------------------------------*\
+    |*                          Constructor                             *|
+    \*------------------------------------------------------------------*/
     
     /**
      * Range form is [start;stop]
@@ -32,15 +37,26 @@ class Range {
         this.step = step;
     }
     
+    /*------------------------------------------------------------------*\
+    |*                          Public Methods                          *|
+    \*------------------------------------------------------------------*/
+    
+    /**
+     * Gets next index
+     * @return 
+     */
     public int next()
     {
         current += step;
         return current;
     }
     
+    /**
+     * Returns true if current is smaller than stop, else false.
+     * @return 
+     */
     public boolean hasNext()
     {
         return current < stop;
     }
-    
 }

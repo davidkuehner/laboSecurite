@@ -97,7 +97,7 @@ Start-Process ping localhost -NoNewWindow -Wait -Credential $Cred
 
     exit_code = subprocess.call(["powershell", s], stdin=(open(os.devnull, 'r')), stdout=(open(os.devnull, 'w')),
                                 stderr=subprocess.STDOUT)
-    return exit_code
+    return exit_code == 0
 
 
 def request_credentials_from_console():
@@ -132,5 +132,5 @@ if __name__ == "__main__":
     else:
         print('unsupported operating system')
 
-    print("Successful? %s" % result)
+    print("Successful? %s" % ('yes' if result is True else 'no'))
 
